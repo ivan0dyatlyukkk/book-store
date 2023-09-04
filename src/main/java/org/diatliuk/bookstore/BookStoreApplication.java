@@ -30,7 +30,7 @@ public class BookStoreApplication {
                     null);
             Book goldEditionKobzar = new Book("Kobzar: Gold Edition",
                     "Shevchenko T.G.",
-                    "123",
+                    "1235",
                     BigDecimal.valueOf(1000),
                     "The second part of the most famous book",
                     null);
