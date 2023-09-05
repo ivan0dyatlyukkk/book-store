@@ -1,7 +1,6 @@
 package org.diatliuk.bookstore.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.BookDto;
 import org.diatliuk.bookstore.dto.CreateBookRequestDto;
@@ -25,7 +24,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> findAll() {
+    public List<BookDto> getAll() {
         return bookRepository.findAll().stream()
                 .map(bookMapper::toDto)
                 .toList();
@@ -33,10 +32,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto getBookById(Long id) {
-        Optional<Book> optionalBook = bookRepository.findBookById(id);
-        if (optionalBook.isPresent()) {
-            return bookMapper.toDto(optionalBook.get());
-        }
-        throw new EntityNotFoundException("Can't find a book with id: " + id);
+        Book book = bookRepository.findBookById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Can't find a book with id:" + id));
+        return bookMapper.toDto(book);
     }
 }

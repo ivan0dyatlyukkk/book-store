@@ -7,7 +7,7 @@ import org.diatliuk.bookstore.dto.CreateBookRequestDto;
 public interface BookService {
     BookDto save(CreateBookRequestDto requestDto);
 
-    List<BookDto> findAll();
+    List<BookDto> getAll();
 
     BookDto getBookById(Long id);
 }
