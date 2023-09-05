@@ -1,6 +1,7 @@
 package org.diatliuk.bookstore.repository.impl;
 
 import java.util.List;
+import java.util.Optional;
 import org.diatliuk.bookstore.exception.DataProcessingException;
 import org.diatliuk.bookstore.model.Book;
 import org.diatliuk.bookstore.repository.BookRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class BookRepositoryImpl implements BookRepository {
+    private static final String ENTITY_ID_PARAM = "id";
     private final SessionFactory sessionFactory;
 
     @Autowired
@@ -39,6 +41,18 @@ public class BookRepositoryImpl implements BookRepository {
             if (session != null) {
                 session.close();
             }
+        }
+    }
+
+    @Override
+    public Optional<Book> findBookById(Long id) {
+        String hql = "FROM Book WHERE id = :id";
+        try (Session session = sessionFactory.openSession()) {
+            Query<Book> getBookById = session.createQuery(hql, Book.class);
+            getBookById.setParameter(ENTITY_ID_PARAM, id);
+            return Optional.ofNullable(getBookById.getSingleResult());
+        } catch (Exception e) {
+            throw new DataProcessingException("Can't find a book by id: " + id, e);
         }
     }
 
