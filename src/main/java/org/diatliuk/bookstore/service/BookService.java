@@ -1,10 +1,13 @@
 package org.diatliuk.bookstore.service;
 
 import java.util.List;
-import org.diatliuk.bookstore.model.Book;
+import org.diatliuk.bookstore.dto.BookDto;
+import org.diatliuk.bookstore.dto.CreateBookRequestDto;
 
 public interface BookService {
-    Book save(Book book);
+    BookDto save(CreateBookRequestDto requestDto);
 
-    List<Book> findAll();
+    List<BookDto> getAll();
+
+    BookDto getBookById(Long id);
 }

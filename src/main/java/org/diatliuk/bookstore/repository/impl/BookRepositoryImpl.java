@@ -1,6 +1,7 @@
 package org.diatliuk.bookstore.repository.impl;
 
 import java.util.List;
+import java.util.Optional;
 import org.diatliuk.bookstore.exception.DataProcessingException;
 import org.diatliuk.bookstore.model.Book;
 import org.diatliuk.bookstore.repository.BookRepository;
@@ -39,6 +40,15 @@ public class BookRepositoryImpl implements BookRepository {
             if (session != null) {
                 session.close();
             }
+        }
+    }
+
+    @Override
+    public Optional<Book> findBookById(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            return Optional.ofNullable(session.find(Book.class, id));
+        } catch (Exception e) {
+            throw new DataProcessingException("Can't find a book by id: " + id, e);
         }
     }
 
