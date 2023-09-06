@@ -1,5 +1,6 @@
 package org.diatliuk.bookstore.controller;
 
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.BookDto;
@@ -46,5 +47,10 @@ public class BookController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) {
         bookService.deleteById(id);
+    }
+
+    @GetMapping("/search")
+    public List<BookDto> search() {
+        return Collections.emptyList();
     }
 }
