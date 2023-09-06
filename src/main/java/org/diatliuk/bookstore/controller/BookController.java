@@ -1,6 +1,5 @@
 package org.diatliuk.bookstore.controller;
 
-import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.BookDto;

@@ -17,6 +17,8 @@ public class AuthorSpecificationProvider implements SpecificationProvider<Book> 
 
     @Override
     public Specification<Book> getSpecification(String[] params) {
-        return (root, query, criteriaBuilder) -> root.get(FIELD_NAME).in(Arrays.stream(params).toArray());
+        return (root, query, criteriaBuilder) -> root.get(FIELD_NAME)
+                                                        .in(Arrays.stream(params)
+                                                        .toArray());
     }
 }
