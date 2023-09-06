@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.BookDto;
+import org.diatliuk.bookstore.dto.BookSearchParametersDto;
 import org.diatliuk.bookstore.dto.CreateBookRequestDto;
 import org.diatliuk.bookstore.service.BookService;
 import org.springframework.http.HttpStatus;
@@ -50,7 +51,7 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public List<BookDto> search() {
-        return Collections.emptyList();
+    public List<BookDto> search(BookSearchParametersDto searchParametersDto) {
+        return bookService.search(searchParametersDto);
     }
 }

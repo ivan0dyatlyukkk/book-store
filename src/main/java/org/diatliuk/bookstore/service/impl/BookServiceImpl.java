@@ -3,12 +3,15 @@ package org.diatliuk.bookstore.service.impl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.BookDto;
+import org.diatliuk.bookstore.dto.BookSearchParametersDto;
 import org.diatliuk.bookstore.dto.CreateBookRequestDto;
 import org.diatliuk.bookstore.exception.EntityNotFoundException;
 import org.diatliuk.bookstore.mapper.BookMapper;
 import org.diatliuk.bookstore.model.Book;
-import org.diatliuk.bookstore.repository.BookRepository;
+import org.diatliuk.bookstore.repository.book.BookRepository;
+import org.diatliuk.bookstore.repository.specification.SpecificationBuilder;
 import org.diatliuk.bookstore.service.BookService;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
+    private final SpecificationBuilder<Book> specificationBuilder;
 
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
@@ -48,4 +52,14 @@ public class BookServiceImpl implements BookService {
     public void deleteById(Long id) {
         bookRepository.deleteById(id);
     }
+
+    @Override
+    public List<BookDto> search(BookSearchParametersDto params) {
+        Specification<Book> bookSpecification = specificationBuilder.build(params);
+        return bookRepository.findAll(bookSpecification).stream()
+                .map(bookMapper::toDto)
+                .toList();
+    }
+
+
 }

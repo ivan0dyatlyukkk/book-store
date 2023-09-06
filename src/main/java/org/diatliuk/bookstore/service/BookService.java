@@ -2,6 +2,7 @@ package org.diatliuk.bookstore.service;
 
 import java.util.List;
 import org.diatliuk.bookstore.dto.BookDto;
+import org.diatliuk.bookstore.dto.BookSearchParametersDto;
 import org.diatliuk.bookstore.dto.CreateBookRequestDto;
 
 public interface BookService {
@@ -14,4 +15,6 @@ public interface BookService {
     BookDto update(Long id, CreateBookRequestDto bookDto);
 
     void deleteById(Long id);
+
+    List<BookDto> search(BookSearchParametersDto params);
 }
