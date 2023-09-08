@@ -1,6 +1,8 @@
 package org.diatliuk.bookstore.service.impl;
 
 import java.util.List;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.BookDto;
 import org.diatliuk.bookstore.dto.BookSearchParametersDto;
