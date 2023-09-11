@@ -1,9 +1,9 @@
 package org.diatliuk.bookstore.service;
 
 import java.util.List;
-import org.diatliuk.bookstore.dto.BookDto;
-import org.diatliuk.bookstore.dto.BookSearchParametersDto;
-import org.diatliuk.bookstore.dto.CreateBookRequestDto;
+import org.diatliuk.bookstore.dto.book.BookDto;
+import org.diatliuk.bookstore.dto.book.BookSearchParametersDto;
+import org.diatliuk.bookstore.dto.book.CreateBookRequestDto;
 import org.springframework.data.domain.Pageable;
 
 public interface BookService {

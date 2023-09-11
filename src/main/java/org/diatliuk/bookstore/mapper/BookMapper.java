@@ -1,8 +1,8 @@
 package org.diatliuk.bookstore.mapper;
 
 import org.diatliuk.bookstore.config.MapperConfig;
-import org.diatliuk.bookstore.dto.BookDto;
-import org.diatliuk.bookstore.dto.CreateBookRequestDto;
+import org.diatliuk.bookstore.dto.book.BookDto;
+import org.diatliuk.bookstore.dto.book.CreateBookRequestDto;
 import org.diatliuk.bookstore.model.Book;
 import org.mapstruct.Mapper;
 
