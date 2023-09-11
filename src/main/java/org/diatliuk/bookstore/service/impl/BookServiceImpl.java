@@ -11,6 +11,7 @@ import org.diatliuk.bookstore.model.Book;
 import org.diatliuk.bookstore.repository.book.BookRepository;
 import org.diatliuk.bookstore.repository.specification.SpecificationBuilder;
 import org.diatliuk.bookstore.service.BookService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +29,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> getAll() {
-        return bookRepository.findAll().stream()
+    public List<BookDto> getAll(Pageable pageable) {
+        return bookRepository.findAll(pageable).stream()
                 .map(bookMapper::toDto)
                 .toList();
     }
