@@ -1,5 +1,6 @@
 package org.diatliuk.bookstore.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.BookDto;
@@ -34,12 +35,12 @@ public class BookController {
     }
 
     @PostMapping
-    public BookDto create(@RequestBody CreateBookRequestDto bookDto) {
+    public BookDto create(@RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.save(bookDto);
     }
 
     @PutMapping("/{id}")
-    public BookDto update(@PathVariable Long id, @RequestBody CreateBookRequestDto bookDto) {
+    public BookDto update(@PathVariable Long id, @RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.update(id, bookDto);
     }
 
