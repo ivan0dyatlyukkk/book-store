@@ -1,15 +1,14 @@
 package org.diatliuk.bookstore.security;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.Date;
-import java.util.function.Function;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Date;
+import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +32,7 @@ public class JwtUtil {
     }
 
     public boolean isValidToken(String token) {
-        try{
+        try {
             Jws<Claims> claimsJws = Jwts.parserBuilder()
                     .setSigningKey(secret)
                     .build()

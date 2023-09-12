@@ -50,7 +50,8 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Object> handleRuntimeException(RuntimeException ex) {
-        Map<String, Object> errorsMap = createErrorsMap(HttpStatus.NOT_IMPLEMENTED, ex.getMessage());
+        Map<String, Object> errorsMap = createErrorsMap(HttpStatus.NOT_IMPLEMENTED,
+                                                        ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.NOT_IMPLEMENTED)
                 .body(errorsMap);

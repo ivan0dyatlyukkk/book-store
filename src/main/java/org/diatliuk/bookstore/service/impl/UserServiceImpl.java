@@ -1,5 +1,6 @@
 package org.diatliuk.bookstore.service.impl;
 
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.user.UserLoginRequestDto;
 import org.diatliuk.bookstore.dto.user.UserLoginResponseDto;
@@ -17,8 +18,6 @@ import org.diatliuk.bookstore.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
-
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -34,7 +33,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto register(UserRegistrationRequestDto requestDto) throws RegistrationException {
+    public UserResponseDto register(UserRegistrationRequestDto requestDto)
+                                            throws RegistrationException {
         if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
             throw new RegistrationException("Unable to complete registration!");
         }
