@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-admin-to-users-table
+      author: ivan-diatliuk
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "admin@admin.com"
+              - column:
+                  name: password
+                  value: "$2a$10$lfswTDbX2cYC8onatVWCAe3snF8Z5iXnL8VTKbsR4A6EiT4epw/mu"
+              - column:
+                  name: first_name
+                  value: "admin"
+              - column:
+                  name: last_name
+                  value: "admin"
+        - insert:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 1
+              - column:
+                  name: role_id
+                  valueNumeric: 1

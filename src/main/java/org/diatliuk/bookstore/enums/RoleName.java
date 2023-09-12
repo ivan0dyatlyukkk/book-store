@@ -1,5 +1,5 @@
 package org.diatliuk.bookstore.enums;
 
 public enum RoleName {
-    USER, ADMIN
+    ROLE_USER, ROLE_ADMIN
 }

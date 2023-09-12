@@ -8,6 +8,7 @@ import org.diatliuk.bookstore.dto.user.UserLoginResponseDto;
 import org.diatliuk.bookstore.dto.user.UserRegistrationRequestDto;
 import org.diatliuk.bookstore.dto.user.UserResponseDto;
 import org.diatliuk.bookstore.exception.RegistrationException;
+import org.diatliuk.bookstore.security.AuthenticationService;
 import org.diatliuk.bookstore.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,10 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final UserService userService;
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
     public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto requestDto) {
-        return null;
+        return authenticationService.authenticate(requestDto);
     }
 
     @PostMapping("/register")
