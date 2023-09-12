@@ -8,7 +8,13 @@ import org.diatliuk.bookstore.annotation.FieldMatch;
 import org.hibernate.validator.constraints.Length;
 
 @Data
-@FieldMatch
+@FieldMatch.List({
+        @FieldMatch(
+                field = "password",
+                fieldMatch = "repeatPassword",
+                message = "The password and repeat password aren't the same"
+        )
+})
 public class UserRegistrationRequestDto {
     @Email
     @Schema(example = "new@example.com")
