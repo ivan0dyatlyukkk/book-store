@@ -1,5 +1,6 @@
 package org.diatliuk.bookstore.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +25,13 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
+    @Operation(summary = "Login an existed user")
     public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto requestDto) {
         return authenticationService.authenticate(requestDto);
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Register a new user")
     public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto requestDto) throws RegistrationException {
         return userService.register(requestDto);
     }

@@ -40,6 +40,22 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 .body(errorsMap);
     }
 
+    @ExceptionHandler(RegistrationException.class)
+    public ResponseEntity<Object> handleRegistrationException(RegistrationException ex) {
+        Map<String, Object> errorsMap = createErrorsMap(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorsMap);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> handleRuntimeException(RuntimeException ex) {
+        Map<String, Object> errorsMap = createErrorsMap(HttpStatus.NOT_IMPLEMENTED, ex.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.NOT_IMPLEMENTED)
+                .body(errorsMap);
+    }
+
     private Map<String, Object> createErrorsMap(HttpStatus status, Object errors) {
         Map<String, Object> errorRepresentation = new LinkedHashMap<>();
         errorRepresentation.put("timestamp", LocalDateTime.now());
