@@ -16,6 +16,7 @@ import org.hibernate.validator.constraints.Length;
         )
 })
 public class UserRegistrationRequestDto {
+    @NotBlank
     @Email
     @Schema(example = "new@example.com")
     private String email;

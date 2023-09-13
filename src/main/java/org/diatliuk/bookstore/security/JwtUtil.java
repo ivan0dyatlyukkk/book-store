@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class JwtUtil {
     @Value("${jwt.expiration}")
     private Long expiration;
-    private Key secret;
+    private final Key secret;
 
     public JwtUtil(@Value("${jwt.secret}") String secretString) {
         secret = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_8));

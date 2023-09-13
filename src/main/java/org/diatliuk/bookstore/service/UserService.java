@@ -7,7 +7,5 @@ import org.diatliuk.bookstore.dto.user.UserResponseDto;
 import org.diatliuk.bookstore.exception.RegistrationException;
 
 public interface UserService {
-    UserLoginResponseDto login(UserLoginRequestDto requestDto);
-
     UserResponseDto register(UserRegistrationRequestDto requestDto) throws RegistrationException;
 }

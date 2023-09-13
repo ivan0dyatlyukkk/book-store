@@ -28,11 +28,6 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public UserLoginResponseDto login(UserLoginRequestDto requestDto) {
-        return null;
-    }
-
-    @Override
     public UserResponseDto register(UserRegistrationRequestDto requestDto)
                                             throws RegistrationException {
         if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
