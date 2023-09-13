@@ -2,9 +2,9 @@ package org.diatliuk.bookstore.service.impl;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.diatliuk.bookstore.dto.BookDto;
-import org.diatliuk.bookstore.dto.BookSearchParametersDto;
-import org.diatliuk.bookstore.dto.CreateBookRequestDto;
+import org.diatliuk.bookstore.dto.book.BookDto;
+import org.diatliuk.bookstore.dto.book.BookSearchParametersDto;
+import org.diatliuk.bookstore.dto.book.CreateBookRequestDto;
 import org.diatliuk.bookstore.exception.EntityNotFoundException;
 import org.diatliuk.bookstore.mapper.BookMapper;
 import org.diatliuk.bookstore.model.Book;

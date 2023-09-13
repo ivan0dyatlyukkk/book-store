@@ -1,7 +1,7 @@
 package org.diatliuk.bookstore.repository.book;
 
 import lombok.RequiredArgsConstructor;
-import org.diatliuk.bookstore.dto.BookSearchParametersDto;
+import org.diatliuk.bookstore.dto.book.BookSearchParametersDto;
 import org.diatliuk.bookstore.model.Book;
 import org.diatliuk.bookstore.repository.specification.SpecificationBuilder;
 import org.diatliuk.bookstore.repository.specification.SpecificationProviderManager;
