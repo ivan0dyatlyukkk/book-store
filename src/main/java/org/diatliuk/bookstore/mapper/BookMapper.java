@@ -1,6 +1,5 @@
 package org.diatliuk.bookstore.mapper;
 
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.diatliuk.bookstore.config.MapperConfig;
 import org.diatliuk.bookstore.dto.book.BookDto;
@@ -15,7 +14,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapperConfig.class)
 public interface BookMapper {
-    @Mapping(target = "categoryIds", source = "categories")
+    @Mapping(target = "categoryIds", ignore = true)
     BookDto toDto(Book book);
 
     BookDtoWithoutCategoryIds toBookDtoWithoutCategoryIds(Book book);
@@ -31,22 +30,21 @@ public interface BookMapper {
         }
     }
 
-    default Set<Long> mapCategoriesToCategoryIds(Set<Category> categories) {
-        return categories.stream()
-                .map(Category::getId)
-                .collect(Collectors.toSet());
-    }
-
-    default Set<Category> mapCategoryIdsToCategories(Set<Long> categoryIds) {
-        return categoryIds.stream()
-                .map(id -> {
-                    Category category = new Category();
-                    category.setId(id);
-                    return category;
-                })
-                .collect(Collectors.toSet());
-    }
-
-    @Mapping(target = "categories", source = "categoryIds")
+    @Mapping(target = "categories", ignore = true)
     Book toModel(CreateBookRequestDto requestDto);
+
+    @AfterMapping
+    default void setCategories(@MappingTarget Book book, CreateBookRequestDto bookDto) {
+        if (bookDto.getCategoryIds() != null) {
+            book.setCategories(
+                    bookDto.getCategoryIds().stream()
+                            .map(id -> {
+                                Category category = new Category();
+                                category.setId(id);
+                                return category;
+                            })
+                            .collect(Collectors.toSet())
+            );
+        }
+    }
 }
