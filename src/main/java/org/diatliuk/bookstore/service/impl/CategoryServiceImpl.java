@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.book.BookDtoWithoutCategoryIds;
 import org.diatliuk.bookstore.dto.category.CategoryDto;
 import org.diatliuk.bookstore.dto.category.CategoryResponseDto;
-import org.diatliuk.bookstore.exception.CategoryNotFoundException;
+import org.diatliuk.bookstore.exception.EntityNotFoundException;
 import org.diatliuk.bookstore.mapper.BookMapper;
 import org.diatliuk.bookstore.mapper.CategoryMapper;
 import org.diatliuk.bookstore.model.Category;
@@ -39,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto getById(Long id) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException("Can't find "
+                .orElseThrow(() -> new EntityNotFoundException("Can't find "
                                                                 + "a category with id: " + id));
         return categoryMapper.toDto(category);
     }
