@@ -18,18 +18,20 @@ public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
     @Override
     public Specification<Book> build(BookSearchParametersDto bookSearchParametersDto) {
         Specification<Book> specification = Specification.where(null);
-        if (bookSearchParametersDto.getTitle() != null
-                && bookSearchParametersDto.getTitle().length > 0) {
+        if (isParameterPresent(bookSearchParametersDto.getTitle())) {
             specification = specification.and(specificationProviderManager
                     .getSpecificationProvider(TITLE_PARAM_KEY)
                     .getSpecification(bookSearchParametersDto.getTitle()));
         }
-        if (bookSearchParametersDto.getAuthor() != null
-                && bookSearchParametersDto.getAuthor().length > 0) {
+        if (isParameterPresent(bookSearchParametersDto.getAuthor())) {
             specification = specification.and(specificationProviderManager
                     .getSpecificationProvider(AUTHOR_PARAM_KEY)
                     .getSpecification(bookSearchParametersDto.getAuthor()));
         }
         return specification;
+    }
+
+    private boolean isParameterPresent(String[] params) {
+        return params != null && params.length > 0;
     }
 }

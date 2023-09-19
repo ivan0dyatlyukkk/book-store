@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.user.UserRegistrationRequestDto;
 import org.diatliuk.bookstore.dto.user.UserResponseDto;
 import org.diatliuk.bookstore.enums.RoleName;
+import org.diatliuk.bookstore.exception.EntityNotFoundException;
 import org.diatliuk.bookstore.exception.RegistrationException;
-import org.diatliuk.bookstore.exception.RoleNotFoundException;
 import org.diatliuk.bookstore.mapper.UserMapper;
 import org.diatliuk.bookstore.model.Role;
 import org.diatliuk.bookstore.model.User;
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Role defaultRole = roleRepository
                 .findByName(DEFAULT_ROLE)
-                .orElseThrow(() -> new RoleNotFoundException("The role: "
+                .orElseThrow(() -> new EntityNotFoundException("The role: "
                                                             + DEFAULT_ROLE + " does not exist"));
         user.setRoles(Set.of(defaultRole));
         User savedUser = userRepository.save(user);

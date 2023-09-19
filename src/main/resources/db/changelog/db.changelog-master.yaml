@@ -15,3 +15,9 @@ databaseChangeLog:
       file: db/changelog/changes/07-insert-roles-to-roles-table.yaml
   - include:
       file: db/changelog/changes/08-insert-admin-data-to-tables.yaml
+  - include:
+      file: db/changelog/changes/09-create-categories-table.yaml
+  - include:
+      file: db/changelog/changes/10-add-is_deleted-column-to-categories-table.yaml
+  - include:
+      file: db/changelog/changes/11-create-books_categories-table.yaml
