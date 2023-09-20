@@ -42,12 +42,26 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         CartItem cartItem = new CartItem();
         Book book = bookRepository.findById(requestDto.getBookId())
                 .orElseThrow(() -> new EntityNotFoundException("Can't find a book by id + "
-                                                                + requestDto.getBookId()));
+                        + requestDto.getBookId()));
         cartItem.setBook(book);
-        cartItem.setQuantity(requestDto.getQuantity());
+
         User authenticatedUser = userService.getAuthenticatedUser();
         ShoppingCart shoppingCart = shoppingCartRepository
-                                    .getShoppingCartByUserId(authenticatedUser.getId());
+                .getShoppingCartByUserId(authenticatedUser.getId());
+
+        if (isBookPresent(shoppingCart, requestDto.getBookId())) {
+            CartItem existingCartItem = shoppingCart.getCartItems()
+                    .stream()
+                    .filter(item -> item.getBook().getId().equals(requestDto.getBookId()))
+                    .findAny()
+                    .get();
+
+            cartItem.setId(existingCartItem.getId());
+            cartItem.setQuantity(existingCartItem.getQuantity() + requestDto.getQuantity());
+        } else {
+            cartItem.setQuantity(requestDto.getQuantity());
+        }
+
         cartItem.setShoppingCart(shoppingCart);
         return cartItemMapper.toDto(cartItemRepository.save(cartItem));
     }
@@ -64,5 +78,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public void deleteById(Long cartItemId) {
         cartItemRepository.deleteById(cartItemId);
+    }
+
+    private boolean isBookPresent(ShoppingCart shoppingCart, Long bookId) {
+        return shoppingCart.getCartItems()
+                .stream()
+                .anyMatch(cartItem -> cartItem.getBook().getId().equals(bookId));
     }
 }
