@@ -9,6 +9,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -24,10 +26,14 @@ public class CartItem {
 
     @ManyToOne
     @JoinColumn(name = "shopping_cart_id", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private ShoppingCart shoppingCart;
 
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Book book;
 
     @Column(nullable = false)
