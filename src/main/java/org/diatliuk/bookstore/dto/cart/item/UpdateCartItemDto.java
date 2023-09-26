@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 public class UpdateCartItemDto {
     @NotNull
-    @Min(value = 1)
+    @Min(1)
     private Integer quantity;
 }

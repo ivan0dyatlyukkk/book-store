@@ -25,6 +25,7 @@ import org.diatliuk.bookstore.repository.order.OrderRepository;
 import org.diatliuk.bookstore.service.OrderService;
 import org.diatliuk.bookstore.service.ShoppingCartService;
 import org.diatliuk.bookstore.service.UserService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,7 +47,8 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = createOrder(authenticatedUser, shoppingCartDto);
         Order savedOrder = orderRepository.save(order);
-        List<OrderItem> orderItems = cartRepository.getShoppingCartByUserId(authenticatedUser.getId())
+        List<OrderItem> orderItems = cartRepository
+                .getShoppingCartByUserId(authenticatedUser.getId())
                 .getCartItems()
                 .stream()
                 .map(orderItemMapper::cartItemToOrderItem)
@@ -64,7 +66,8 @@ public class OrderServiceImpl implements OrderService {
         Order order = createOrder(authenticatedUser, shoppingCartDto);
         order.setShippingAddress(requestDto.getShippingAddress());
         Order savedOrder = orderRepository.save(order);
-        List<OrderItem> orderItems = cartRepository.getShoppingCartByUserId(authenticatedUser.getId())
+        List<OrderItem> orderItems = cartRepository
+                .getShoppingCartByUserId(authenticatedUser.getId())
                 .getCartItems()
                 .stream()
                 .map(orderItemMapper::cartItemToOrderItem)
@@ -75,8 +78,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> getAll() {
-        return orderRepository.findAll()
+    public List<OrderDto> getAll(Pageable pageable) {
+        return orderRepository.findAll(pageable)
                 .stream()
                 .map(orderMapper::toDto)
                 .collect(Collectors.toList());

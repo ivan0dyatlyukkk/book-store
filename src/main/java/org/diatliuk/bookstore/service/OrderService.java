@@ -5,13 +5,14 @@ import org.diatliuk.bookstore.dto.order.CreateOrderRequestDto;
 import org.diatliuk.bookstore.dto.order.OrderDto;
 import org.diatliuk.bookstore.dto.order.UpdateOrderStatusRequestDto;
 import org.diatliuk.bookstore.dto.order.item.OrderItemDto;
+import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
     OrderDto save();
 
     OrderDto save(CreateOrderRequestDto requestDto);
 
-    List<OrderDto> getAll();
+    List<OrderDto> getAll(Pageable pageable);
 
     OrderDto getById(Long id);
 
