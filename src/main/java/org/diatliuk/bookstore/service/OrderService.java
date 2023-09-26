@@ -8,13 +8,9 @@ import org.diatliuk.bookstore.dto.order.item.OrderItemDto;
 import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
-    OrderDto save();
-
     OrderDto save(CreateOrderRequestDto requestDto);
 
     List<OrderDto> getAll(Pageable pageable);
-
-    OrderDto getById(Long id);
 
     OrderDto update(Long id, UpdateOrderStatusRequestDto requestDto);
 

@@ -9,6 +9,7 @@ import org.diatliuk.bookstore.dto.order.UpdateOrderStatusRequestDto;
 import org.diatliuk.bookstore.dto.order.item.OrderItemDto;
 import org.diatliuk.bookstore.service.OrderService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,27 +25,33 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<OrderDto> getAll(Pageable pageable) {
         return orderService.getAll(pageable);
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_USER')")
     public OrderDto save(@RequestBody @Valid CreateOrderRequestDto requestDto) {
         return orderService.save(requestDto);
     }
 
     @GetMapping("/{id}/items")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public List<OrderItemDto> getOrderItemsByOrderId(@PathVariable Long id) {
         return orderService.getItemsByOrderId(id);
     }
 
     @GetMapping("/{orderId}/items/{itemId}")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public OrderItemDto getItemInOrderById(@PathVariable Long orderId, @PathVariable Long itemId) {
         return orderService.getItemInOrderById(orderId, itemId);
     }
 
     @PatchMapping("/{id}")
-    public OrderDto update(@PathVariable Long id, @Valid UpdateOrderStatusRequestDto requestDto) {
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public OrderDto update(@PathVariable Long id,
+                           @RequestBody @Valid UpdateOrderStatusRequestDto requestDto) {
         return orderService.update(id, requestDto);
     }
 }

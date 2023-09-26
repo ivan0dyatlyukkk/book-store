@@ -2,8 +2,8 @@ package org.diatliuk.bookstore.service.impl;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.cart.ShoppingCartDto;
@@ -15,10 +15,12 @@ import org.diatliuk.bookstore.enums.Status;
 import org.diatliuk.bookstore.exception.EntityNotFoundException;
 import org.diatliuk.bookstore.mapper.OrderItemMapper;
 import org.diatliuk.bookstore.mapper.OrderMapper;
+import org.diatliuk.bookstore.model.CartItem;
 import org.diatliuk.bookstore.model.Order;
 import org.diatliuk.bookstore.model.OrderItem;
 import org.diatliuk.bookstore.model.User;
 import org.diatliuk.bookstore.repository.book.BookRepository;
+import org.diatliuk.bookstore.repository.cart.CartItemRepository;
 import org.diatliuk.bookstore.repository.cart.ShoppingCartRepository;
 import org.diatliuk.bookstore.repository.order.OrderItemRepository;
 import org.diatliuk.bookstore.repository.order.OrderRepository;
@@ -38,25 +40,8 @@ public class OrderServiceImpl implements OrderService {
     private final UserService userService;
     private final ShoppingCartService cartService;
     private final ShoppingCartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
     private final BookRepository bookRepository;
-
-    @Override
-    public OrderDto save() {
-        User authenticatedUser = userService.getAuthenticatedUser();
-        ShoppingCartDto shoppingCartDto = cartService.get();
-
-        Order order = createOrder(authenticatedUser, shoppingCartDto);
-        Order savedOrder = orderRepository.save(order);
-        List<OrderItem> orderItems = cartRepository
-                .getShoppingCartByUserId(authenticatedUser.getId())
-                .getCartItems()
-                .stream()
-                .map(orderItemMapper::cartItemToOrderItem)
-                .peek(orderItem -> orderItem.setOrder(order))
-                .toList();
-        savedOrder.setOrderItems(new HashSet<>(orderItemRepository.saveAll(orderItems)));
-        return orderMapper.toDto(order);
-    }
 
     @Override
     public OrderDto save(CreateOrderRequestDto requestDto) {
@@ -66,15 +51,19 @@ public class OrderServiceImpl implements OrderService {
         Order order = createOrder(authenticatedUser, shoppingCartDto);
         order.setShippingAddress(requestDto.getShippingAddress());
         Order savedOrder = orderRepository.save(order);
-        List<OrderItem> orderItems = cartRepository
+
+        Set<CartItem> cartItems = cartRepository
                 .getShoppingCartByUserId(authenticatedUser.getId())
-                .getCartItems()
+                .getCartItems();
+        List<OrderItem> orderItems = cartItems
                 .stream()
                 .map(orderItemMapper::cartItemToOrderItem)
-                .peek(orderItem -> orderItem.setOrder(order))
+                .peek(orderItem -> orderItem.setOrder(savedOrder))
                 .toList();
-        savedOrder.setOrderItems(new HashSet<>(orderItemRepository.saveAll(orderItems)));
-        return orderMapper.toDto(order);
+
+        savedOrder.setOrderItems(Set.copyOf(orderItemRepository.saveAll(orderItems)));
+        cartItemRepository.deleteAll(cartItems);
+        return orderMapper.toDto(savedOrder);
     }
 
     @Override
@@ -83,15 +72,6 @@ public class OrderServiceImpl implements OrderService {
                 .stream()
                 .map(orderMapper::toDto)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public OrderDto getById(Long id) {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Can't find "
-                        + "an order by id: " + id));
-
-        return orderMapper.toDto(order);
     }
 
     @Override
@@ -113,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderItemDto getItemInOrderById(Long orderId, Long id) {
-        OrderItem item = orderItemRepository.getOrderItemsByOrder_Id(id)
+        OrderItem item = orderItemRepository.getOrderItemsByOrder_Id(orderId)
                 .stream().filter(orderItem -> orderItem.getId().equals(id))
                 .findAny()
                 .orElseThrow(() -> new EntityNotFoundException("Can't find an orderItem with id: "

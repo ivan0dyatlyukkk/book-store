@@ -15,6 +15,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("FROM Order o "
             + "LEFT JOIN o.user "
             + "LEFT JOIN o.orderItems "
-            + "WHERE o.id = ?1")
+            + "WHERE o.id = :id")
     Optional<Order> findById(Long id);
 }
