@@ -1,5 +1,7 @@
 package org.diatliuk.bookstore.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Order management", description = "Endpoints for managing orders")
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
@@ -26,30 +29,39 @@ public class OrderController {
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_USER')")
+    @Operation(summary = "Get all orders", description = "Allow to get list of all orders")
     public List<OrderDto> getAll(Pageable pageable) {
         return orderService.getAll(pageable);
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_USER')")
+    @Operation(summary = "Place an order", description = "Allow to place an order")
     public OrderDto save(@RequestBody @Valid CreateOrderRequestDto requestDto) {
         return orderService.save(requestDto);
     }
 
     @GetMapping("/{id}/items")
     @PreAuthorize("hasRole('ROLE_USER')")
+    @Operation(summary = "Get order items by order id", description = "Allow to get all order "
+                                                    + "items in a certain order by an order id")
     public List<OrderItemDto> getOrderItemsByOrderId(@PathVariable Long id) {
         return orderService.getItemsByOrderId(id);
     }
 
     @GetMapping("/{orderId}/items/{itemId}")
     @PreAuthorize("hasRole('ROLE_USER')")
+    @Operation(summary = "Get an order item by an order id and an item id",
+            description = "Allow to get a certain order item by specifying "
+                            + "an order id and an item id")
     public OrderItemDto getItemInOrderById(@PathVariable Long orderId, @PathVariable Long itemId) {
         return orderService.getItemInOrderById(orderId, itemId);
     }
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(summary = "Update a status of an order", description = "Allow to update a status "
+                                                        + "by an order id")
     public OrderDto update(@PathVariable Long id,
                            @RequestBody @Valid UpdateOrderStatusRequestDto requestDto) {
         return orderService.update(id, requestDto);
