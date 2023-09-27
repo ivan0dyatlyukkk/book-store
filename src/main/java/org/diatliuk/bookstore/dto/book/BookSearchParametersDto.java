@@ -7,7 +7,6 @@ import lombok.Data;
 public class BookSearchParametersDto {
     @Schema(example = "The Great Gatsby")
     private String[] title;
-
     @Schema(example = "F. Scott Fitzgerald")
     private String[] author;
 }
