@@ -13,7 +13,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByCategoriesId(Long categoryId);
 
     @Override
-    @Query("FROM Book b LEFT JOIN FETCH b.categories WHERE b.id = ?1")
+    @Query("FROM Book b LEFT JOIN FETCH b.categories WHERE b.id = :id")
     Optional<Book> findById(Long id);
 
     @Override
