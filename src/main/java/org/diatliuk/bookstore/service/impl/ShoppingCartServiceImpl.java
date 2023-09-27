@@ -1,7 +1,6 @@
 package org.diatliuk.bookstore.service.impl;
 
 import java.util.HashSet;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.cart.ShoppingCartDto;
 import org.diatliuk.bookstore.dto.cart.item.CartItemDto;
@@ -119,7 +118,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private boolean isUserAbleToModifyItem(Long userId, Long cartItemId) {
         Long cartId = shoppingCartRepository.getShoppingCartByUserId(userId).getId();
-        List<CartItem> cartItems = cartItemRepository.findAllByShoppingCartId(cartId);
-        return cartItems.stream().anyMatch(cartItem -> cartItem.getId().equals(cartItemId));
+        return cartItemRepository.existsByIdAndShoppingCartId(cartItemId,cartId);
     }
 }
