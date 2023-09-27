@@ -48,14 +48,6 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
                 .body(errorsMap);
     }
 
-    @ExceptionHandler(IllegalUserAccessException.class)
-    public ResponseEntity<Object> handleIllegalUserAccessException(IllegalUserAccessException ex) {
-        Map<String, Object> errorsMap = createErrorsMap(HttpStatus.LOCKED, ex.getMessage());
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(errorsMap);
-    }
-
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Object> handleRuntimeException(RuntimeException ex) {
         Map<String, Object> errorsMap = createErrorsMap(HttpStatus.NOT_IMPLEMENTED,

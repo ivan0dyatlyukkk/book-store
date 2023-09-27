@@ -9,6 +9,7 @@ public class CategoryDto {
     @NotBlank
     @Schema(example = "Fiction")
     private String name;
+
     @Schema(example = "Fiction books")
     private String description;
 }
