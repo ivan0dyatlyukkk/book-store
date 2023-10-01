@@ -84,9 +84,12 @@ Let's look at the steps of installing the application:
    Using the IntelliJ IDEA: <br>
    Click on "Get from VCS" -> Paste the link ```bash https://github.com/ivan0dyatlyukkk/book-store.git``` in an appropriate field
    
+   <img src="images/clone-the-git-project-via-idea.png" alt="the example of fields">
+
+   
 2. Build the project by Maven
    ```bash
-   mvn clean package
+   mvn clean install
    ```
 
 4. Compose the project by Docker Compose tool:
@@ -100,5 +103,9 @@ Let's look at the steps of installing the application:
 Great! We already set our environment up! ⭐
  
 ## ⚙Integration with Postman
+   If you don't want to come up with an idea of data for the testing requests, and you don't want to type lots of similar requests again and again, you can use the prepared [collection for Postman](#postman-collection) and the [environment](#postman-environment)
 
 ## 🎯Summary
+
+[postman-collection]:
+[postman-environment]:
