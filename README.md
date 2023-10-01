@@ -106,6 +106,9 @@ Great! We already set our environment up! ⭐
    If you don't want to come up with an idea of data for the testing requests, and you don't want to type lots of similar requests again and again, you can use the prepared [collection for Postman](#postman-collection) and the [environment](#postman-environment)
 
 ## 🎯Summary
+<strong><i>The Online Bookstore API</i></strong> is a powerful tool designed to create a seamless and user-friendly experience for book enthusiasts and administrators alike. It serves as the backbone for managing a virtual library of literary treasures and facilitates the process of discovering, purchasing, and managing books. 
 
-[postman-collection]:
-[postman-environment]:
+The video instructions for usage you can watch here: link-for-the-loom-video
+
+[postman-collection]:i-will-add-it-after-merging
+[postman-environment]:i-will-add-it-after-merging
