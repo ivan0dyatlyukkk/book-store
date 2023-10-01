@@ -9,9 +9,11 @@ import org.diatliuk.bookstore.dto.order.CreateOrderRequestDto;
 import org.diatliuk.bookstore.dto.order.OrderDto;
 import org.diatliuk.bookstore.dto.order.UpdateOrderStatusRequestDto;
 import org.diatliuk.bookstore.dto.order.item.OrderItemDto;
+import org.diatliuk.bookstore.service.OrderItemService;
 import org.diatliuk.bookstore.service.OrderService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
+    private final OrderItemService orderItemService;
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -37,8 +40,9 @@ public class OrderController {
     @PostMapping
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = "Place an order", description = "Allow to place an order")
-    public OrderDto save(@RequestBody @Valid CreateOrderRequestDto requestDto) {
-        return orderService.save(requestDto);
+    public OrderDto save(Authentication authentication,
+                         @RequestBody @Valid CreateOrderRequestDto requestDto) {
+        return orderService.save(authentication, requestDto);
     }
 
     @GetMapping("/{id}/items")
@@ -46,7 +50,7 @@ public class OrderController {
     @Operation(summary = "Get order items by order id", description = "Allow to get all order "
                                                     + "items in a certain order by an order id")
     public List<OrderItemDto> getOrderItemsByOrderId(@PathVariable Long id) {
-        return orderService.getItemsByOrderId(id);
+        return orderItemService.getItemsByOrderId(id);
     }
 
     @GetMapping("/{orderId}/items/{itemId}")
@@ -55,7 +59,7 @@ public class OrderController {
             description = "Allow to get a certain order item by specifying "
                             + "an order id and an item id")
     public OrderItemDto getItemInOrderById(@PathVariable Long orderId, @PathVariable Long itemId) {
-        return orderService.getItemInOrderById(orderId, itemId);
+        return orderItemService.getItemInOrderById(orderId, itemId);
     }
 
     @PatchMapping("/{id}")

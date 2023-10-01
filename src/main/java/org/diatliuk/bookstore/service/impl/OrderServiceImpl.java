@@ -1,5 +1,6 @@
 package org.diatliuk.bookstore.service.impl;
 
+import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,7 +11,6 @@ import org.diatliuk.bookstore.dto.cart.ShoppingCartDto;
 import org.diatliuk.bookstore.dto.order.CreateOrderRequestDto;
 import org.diatliuk.bookstore.dto.order.OrderDto;
 import org.diatliuk.bookstore.dto.order.UpdateOrderStatusRequestDto;
-import org.diatliuk.bookstore.dto.order.item.OrderItemDto;
 import org.diatliuk.bookstore.enums.Status;
 import org.diatliuk.bookstore.exception.EntityNotFoundException;
 import org.diatliuk.bookstore.mapper.OrderItemMapper;
@@ -28,14 +28,15 @@ import org.diatliuk.bookstore.service.OrderService;
 import org.diatliuk.bookstore.service.ShoppingCartService;
 import org.diatliuk.bookstore.service.UserService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
-    private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
+    private final OrderItemRepository orderItemRepository;
     private final OrderItemMapper orderItemMapper;
     private final UserService userService;
     private final ShoppingCartService cartService;
@@ -43,10 +44,11 @@ public class OrderServiceImpl implements OrderService {
     private final CartItemRepository cartItemRepository;
     private final BookRepository bookRepository;
 
+    @Transactional
     @Override
-    public OrderDto save(CreateOrderRequestDto requestDto) {
-        User authenticatedUser = userService.getAuthenticatedUser();
-        ShoppingCartDto shoppingCartDto = cartService.get();
+    public OrderDto save(Authentication authentication, CreateOrderRequestDto requestDto) {
+        User authenticatedUser = userService.getAuthenticatedUser(authentication);
+        ShoppingCartDto shoppingCartDto = cartService.get(authentication);
 
         Order order = createOrder(authenticatedUser, shoppingCartDto);
         order.setShippingAddress(requestDto.getShippingAddress());
@@ -55,11 +57,7 @@ public class OrderServiceImpl implements OrderService {
         Set<CartItem> cartItems = cartRepository
                 .getShoppingCartByUserId(authenticatedUser.getId())
                 .getCartItems();
-        List<OrderItem> orderItems = cartItems
-                .stream()
-                .map(orderItemMapper::cartItemToOrderItem)
-                .peek(orderItem -> orderItem.setOrder(savedOrder))
-                .toList();
+        Set<OrderItem> orderItems = convertCartItemsToOrderItems(cartItems, savedOrder);
 
         savedOrder.setOrderItems(Set.copyOf(orderItemRepository.saveAll(orderItems)));
         cartItemRepository.deleteAll(cartItems);
@@ -83,24 +81,6 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toDto(orderRepository.save(order));
     }
 
-    @Override
-    public List<OrderItemDto> getItemsByOrderId(Long id) {
-        return orderItemRepository.getOrderItemsByOrder_Id(id)
-                .stream()
-                .map(orderItemMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public OrderItemDto getItemInOrderById(Long orderId, Long id) {
-        OrderItem item = orderItemRepository.getOrderItemsByOrder_Id(orderId)
-                .stream().filter(orderItem -> orderItem.getId().equals(id))
-                .findAny()
-                .orElseThrow(() -> new EntityNotFoundException("Can't find an orderItem with id: "
-                                                + id + " in the order with id: " + orderId));
-        return orderItemMapper.toDto(item);
-    }
-
     private BigDecimal calculateTotalSum(ShoppingCartDto shoppingCartDto) {
         Double total = shoppingCartDto.getCartItems().stream()
                 .map(item ->
@@ -120,5 +100,13 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderDate(LocalDateTime.now());
         order.setShippingAddress(user.getShippingAddress());
         return order;
+    }
+
+    private Set<OrderItem> convertCartItemsToOrderItems(Set<CartItem> cartItems, Order order) {
+        return cartItems
+                .stream()
+                .map(orderItemMapper::cartItemToOrderItem)
+                .peek(orderItem -> orderItem.setOrder(order))
+                .collect(Collectors.toSet());
     }
 }

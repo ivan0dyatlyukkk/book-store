@@ -6,15 +6,16 @@ import org.diatliuk.bookstore.dto.cart.item.CreateCartItemRequestDto;
 import org.diatliuk.bookstore.dto.cart.item.UpdateCartItemDto;
 import org.diatliuk.bookstore.model.ShoppingCart;
 import org.diatliuk.bookstore.model.User;
+import org.springframework.security.core.Authentication;
 
 public interface ShoppingCartService {
-    ShoppingCartDto get();
+    ShoppingCartDto get(Authentication authentication);
 
-    CartItemDto save(CreateCartItemRequestDto requestDto);
+    CartItemDto save(Authentication authentication, CreateCartItemRequestDto requestDto);
 
-    CartItemDto update(Long cartItemId, UpdateCartItemDto quantity);
+    CartItemDto update(Authentication authentication, Long cartItemId, UpdateCartItemDto quantity);
 
-    void deleteById(Long cartItemId);
+    void deleteById(Authentication authentication, Long cartItemId);
 
     ShoppingCart create(User user);
 }
