@@ -8,7 +8,6 @@ import lombok.Data;
 public class CreateCartItemRequestDto {
     @NotNull
     private Long bookId;
-
     @NotNull
     @Min(1)
     private Integer quantity;

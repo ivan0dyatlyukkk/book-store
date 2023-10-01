@@ -1,5 +1,6 @@
 package org.diatliuk.bookstore.service.impl;
 
+import java.util.HashSet;
 import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.cart.ShoppingCartDto;
 import org.diatliuk.bookstore.dto.cart.item.CartItemDto;
@@ -40,6 +41,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         User authenticatedUser = userService.getAuthenticatedUser(authentication);
         ShoppingCart shoppingCart = shoppingCartRepository
                                     .getShoppingCartByUserId(authenticatedUser.getId());
+        shoppingCart.setCartItems(new HashSet<>(cartItemRepository
+                .findAllByShoppingCartId(shoppingCart.getId()))
+        );
         return cartMapper.toDto(shoppingCart);
     }
 
@@ -83,13 +87,14 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new EntityNotFoundException("Can't find a cart item by id: "
                                                                 + cartItemId));
-
         if (!isUserAbleToModifyItem(shoppingCart, cartItemId)) {
             throw new IllegalUserAccessException("The user can't modify this cart item!");
         }
 
         cartItem.setQuantity(updateDto.getQuantity());
-        return cartItemMapper.toDto(cartItemRepository.save(cartItem));
+        CartItem savedItem = cartItemRepository.save(cartItem);
+        savedItem.setBook(cartItem.getBook());
+        return cartItemMapper.toDto(savedItem);
     }
 
     @Override
