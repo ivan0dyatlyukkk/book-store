@@ -1,5 +1,6 @@
 package org.diatliuk.bookstore.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.cart.ShoppingCartDto;
 import org.diatliuk.bookstore.dto.cart.item.CartItemDto;
@@ -43,6 +44,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return cartMapper.toDto(shoppingCart);
     }
 
+    @Transactional
     @Override
     public CartItemDto save(Authentication authentication, CreateCartItemRequestDto requestDto) {
         CartItem cartItem = new CartItem();
@@ -72,6 +74,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return cartItemMapper.toDto(cartItemRepository.save(cartItem));
     }
 
+    @Transactional
     @Override
     public CartItemDto update(Authentication authentication,
                               Long cartItemId,
@@ -84,7 +87,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .orElseThrow(() -> new EntityNotFoundException("Can't find a cart item by id: "
                                                                 + cartItemId));
 
-        if (!isUserAbleToModifyItem(shoppingCart, cartItemId)) {
+        if (!ifShoppingCartContainsCartItem(shoppingCart, cartItemId)) {
             throw new IllegalUserAccessException("The user can't modify this cart item!");
         }
 
@@ -98,7 +101,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart shoppingCart = shoppingCartRepository
                 .getShoppingCartByUserId(authenticatedUser.getId());
 
-        if (!isUserAbleToModifyItem(shoppingCart, cartItemId)) {
+        if (!ifShoppingCartContainsCartItem(shoppingCart, cartItemId)) {
             throw new IllegalUserAccessException("The user can't modify this cart item!");
         }
         cartItemRepository.deleteById(cartItemId);
@@ -118,7 +121,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .anyMatch(cartItem -> cartItem.getBook().getId().equals(bookId));
     }
 
-    private boolean isUserAbleToModifyItem(ShoppingCart shoppingCart, Long cartItemId) {
+    private boolean ifShoppingCartContainsCartItem(ShoppingCart shoppingCart, Long cartItemId) {
         return shoppingCart.getCartItems()
                 .stream()
                 .anyMatch(cartItem -> cartItem.getId().equals(cartItemId));

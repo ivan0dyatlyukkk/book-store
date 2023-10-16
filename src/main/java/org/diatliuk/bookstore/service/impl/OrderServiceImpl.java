@@ -15,6 +15,7 @@ import org.diatliuk.bookstore.enums.Status;
 import org.diatliuk.bookstore.exception.EntityNotFoundException;
 import org.diatliuk.bookstore.mapper.OrderItemMapper;
 import org.diatliuk.bookstore.mapper.OrderMapper;
+import org.diatliuk.bookstore.model.Book;
 import org.diatliuk.bookstore.model.CartItem;
 import org.diatliuk.bookstore.model.Order;
 import org.diatliuk.bookstore.model.OrderItem;
@@ -47,13 +48,10 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public OrderDto save(Authentication authentication, CreateOrderRequestDto requestDto) {
-        User authenticatedUser = userService.getAuthenticatedUser(authentication);
-        ShoppingCartDto shoppingCartDto = cartService.get(authentication);
-
-        Order order = createOrder(authenticatedUser, shoppingCartDto);
-        order.setShippingAddress(requestDto.getShippingAddress());
+        Order order = createOrder(authentication, requestDto.getShippingAddress());
         Order savedOrder = orderRepository.save(order);
 
+        User authenticatedUser = userService.getAuthenticatedUser(authentication);
         Set<CartItem> cartItems = cartRepository
                 .getShoppingCartByUserId(authenticatedUser.getId())
                 .getCartItems();
@@ -72,6 +70,7 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public OrderDto update(Long id, UpdateOrderStatusRequestDto requestDto) {
         Order order = orderRepository.findById(id)
@@ -82,23 +81,31 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private BigDecimal calculateTotalSum(ShoppingCartDto shoppingCartDto) {
+        List<Book> books = bookRepository.findAll();
         Double total = shoppingCartDto.getCartItems().stream()
                 .map(item ->
-                        item.getQuantity() * bookRepository.findById(item.getBookId())
-                                                                        .get()
-                                                                        .getPrice()
-                                                                        .doubleValue())
+                        item.getQuantity() * books
+                                            .stream()
+                                            .filter(book -> book.getId().equals(item.getBookId()))
+                                            .findAny()
+                                            .get()
+                                            .getPrice()
+                                            .doubleValue()
+                )
                 .reduce(0.0, Double::sum);
         return BigDecimal.valueOf(total);
     }
 
-    private Order createOrder(User user, ShoppingCartDto shoppingCartDto) {
+    private Order createOrder(Authentication authentication, String shippingAddress) {
+        User user = userService.getAuthenticatedUser(authentication);
+        ShoppingCartDto shoppingCartDto = cartService.get(authentication);
+
         Order order = new Order();
         order.setUser(user);
         order.setStatus(Status.CREATED);
         order.setTotal(calculateTotalSum(shoppingCartDto));
         order.setOrderDate(LocalDateTime.now());
-        order.setShippingAddress(user.getShippingAddress());
+        order.setShippingAddress(shippingAddress);
         return order;
     }
 
