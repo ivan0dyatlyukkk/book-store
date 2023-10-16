@@ -24,6 +24,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 public class ShoppingCartServiceImpl implements ShoppingCartService {
@@ -41,6 +44,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         User authenticatedUser = userService.getAuthenticatedUser(authentication);
         ShoppingCart shoppingCart = shoppingCartRepository
                                     .getShoppingCartByUserId(authenticatedUser.getId());
+        List<CartItem> cartItems = cartItemRepository.findAllByShoppingCartId(shoppingCart.getId());
+        shoppingCart.setCartItems(Set.copyOf(cartItems));
         return cartMapper.toDto(shoppingCart);
     }
 
