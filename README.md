@@ -107,12 +107,18 @@ Great! We already set our environment up! ⭐
    If you don't want to come up with an idea of data for the testing requests, and you don't want to type lots of similar requests again and again, you can use the prepared [collection for Postman](#postman-collection) and the [environment](#postman-environment)
 
 ## Contributing
+We appreciate your interest in contributing to this project! <br>
+Your help and input are valuable in making this project better for everyone. <br>
+Whether you want to report a bug, request a feature, or submit a pull request, you can follow [🛠Installation](#installation). <br>
+If you have any questions, need further information, or wish to explore opportunities for collaboration in the development of this project, feel free to reach out to me. <br>
+My email: `studdyatlyuk21@gmail.com`
+
 
 ## 🎯Summary
 <strong><i>The Online Bookstore API</i></strong> is a powerful tool designed to create a seamless and user-friendly experience for book enthusiasts and administrators alike. It serves as the backbone for managing a virtual library of literary treasures and facilitates the process of discovering, purchasing, and managing books. 
 
-The video instructions for usage you can watch here: 
-`https://www.loom.com/share/aa48bd7d22ee43bdb4acd0356d3a19d1?sid=4cb89221-9b2b-4eb3-a4d7-530a01d9edfb`
+The video instructions for usage you can watch here:
+[loom-video](https://www.loom.com/share/aa48bd7d22ee43bdb4acd0356d3a19d1?sid=4cb89221-9b2b-4eb3-a4d7-530a01d9edfb)
 
 [postman-collection]:i-will-add-it-after-merging
 [postman-environment]:i-will-add-it-after-merging
