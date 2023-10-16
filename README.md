@@ -11,6 +11,7 @@ The Online Bookstore API 📚 provides simple APIs for managing an online bookst
 - [🌟Features](#features)
 - [🛠️Installation](#installation)
 - [⚙️Integration with Postman](#integration-with-postman)
+- [Contributing](#contributing)
 - [🎯Summary](#summary)
 
 ## 👨‍💻Tech stack
@@ -105,10 +106,13 @@ Great! We already set our environment up! ⭐
 ## ⚙Integration with Postman
    If you don't want to come up with an idea of data for the testing requests, and you don't want to type lots of similar requests again and again, you can use the prepared [collection for Postman](#postman-collection) and the [environment](#postman-environment)
 
+## Contributing
+
 ## 🎯Summary
 <strong><i>The Online Bookstore API</i></strong> is a powerful tool designed to create a seamless and user-friendly experience for book enthusiasts and administrators alike. It serves as the backbone for managing a virtual library of literary treasures and facilitates the process of discovering, purchasing, and managing books. 
 
-The video instructions for usage you can watch here: link-for-the-loom-video
+The video instructions for usage you can watch here: 
+`https://www.loom.com/share/aa48bd7d22ee43bdb4acd0356d3a19d1?sid=4cb89221-9b2b-4eb3-a4d7-530a01d9edfb`
 
 [postman-collection]:i-will-add-it-after-merging
 [postman-environment]:i-will-add-it-after-merging
