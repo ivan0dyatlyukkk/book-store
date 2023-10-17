@@ -1,5 +1,6 @@
 package org.diatliuk.bookstore.service.impl;
 
+import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.book.BookDtoWithoutCategoryIds;
@@ -23,6 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
+    @Transactional
     @Override
     public CategoryResponseDto save(CategoryDto categoryDto) {
         Category category = categoryMapper.toModel(categoryDto);
@@ -44,6 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.toDto(category);
     }
 
+    @Transactional
     @Override
     public CategoryDto update(Long id, CategoryDto categoryDto) {
         Category category = categoryMapper.toModel(categoryDto);

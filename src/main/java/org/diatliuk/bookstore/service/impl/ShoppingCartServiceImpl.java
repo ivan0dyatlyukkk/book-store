@@ -1,6 +1,8 @@
 package org.diatliuk.bookstore.service.impl;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.cart.ShoppingCartDto;
 import org.diatliuk.bookstore.dto.cart.item.CartItemDto;
@@ -23,9 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
