@@ -1,3 +1,1 @@
-<h1 align="center">The Online Book Store API</h1>
-
-
+# The book store application

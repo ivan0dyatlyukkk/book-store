@@ -15,6 +15,7 @@ import org.diatliuk.bookstore.repository.user.UserRepository;
 import org.diatliuk.bookstore.service.ShoppingCartService;
 import org.diatliuk.bookstore.service.UserService;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -48,9 +49,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getAuthenticatedUser(Authentication authentication) {
-        return userRepository.findByEmail(authentication.getName())
+    public User getAuthenticatedUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findByEmail(auth.getName())
                 .orElseThrow(() -> new EntityNotFoundException("Can't find a user by email: "
-                        + authentication.getName()));
+                        + auth.getName()));
     }
 }
