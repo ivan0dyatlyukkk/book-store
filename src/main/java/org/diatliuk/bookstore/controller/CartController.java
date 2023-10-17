@@ -11,6 +11,7 @@ import org.diatliuk.bookstore.dto.cart.item.UpdateCartItemDto;
 import org.diatliuk.bookstore.service.ShoppingCartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,25 +33,27 @@ public class CartController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = "Get a shopping cart", description = "Allow to get all info "
                                             + "about a user's shopping cart")
-    public ShoppingCartDto get() {
-        return shoppingCartService.get();
+    public ShoppingCartDto get(Authentication authentication) {
+        return shoppingCartService.get(authentication);
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = "Save a new cart item to the shopping cart", description = "Allow to save"
             + " a new cart item to the shopping cart")
-    public CartItemDto saveItem(@RequestBody @Valid CreateCartItemRequestDto createDto) {
-        return shoppingCartService.save(createDto);
+    public CartItemDto saveItem(Authentication authentication,
+                                @RequestBody @Valid CreateCartItemRequestDto createDto) {
+        return shoppingCartService.save(authentication, createDto);
     }
 
     @PutMapping("cart-items/{cartItemId}")
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = "Update a cart item", description = "Allow to update a quantity of "
             + "the cart item by cart item id")
-    public CartItemDto updateItemQuantity(@PathVariable Long cartItemId,
-                                           @RequestBody @Valid UpdateCartItemDto updateDto) {
-        return shoppingCartService.update(cartItemId, updateDto);
+    public CartItemDto updateItemQuantity(Authentication authentication,
+                                          @PathVariable Long cartItemId,
+                                          @RequestBody @Valid UpdateCartItemDto updateDto) {
+        return shoppingCartService.update(authentication, cartItemId, updateDto);
     }
 
     @DeleteMapping("cart-items/{cartItemId}")
@@ -58,7 +61,7 @@ public class CartController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @Operation(summary = "Delete a cart item", description = "Allow to delete "
                                                 + "a particular cart item by its id")
-    public void deleteItemById(@PathVariable Long cartItemId) {
-        shoppingCartService.deleteById(cartItemId);
+    public void deleteItemById(Authentication authentication, @PathVariable Long cartItemId) {
+        shoppingCartService.deleteById(authentication, cartItemId);
     }
 }
