@@ -1,5 +1,6 @@
 package org.diatliuk.bookstore.service.impl;
 
+import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.book.BookDto;
@@ -22,6 +23,7 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
     private final SpecificationBuilder<Book> specificationBuilder;
 
+    @Transactional
     @Override
     public BookDto save(CreateBookRequestDto requestDto) {
         Book book = bookMapper.toModel(requestDto);
@@ -42,6 +44,7 @@ public class BookServiceImpl implements BookService {
         return bookMapper.toDto(book);
     }
 
+    @Transactional
     @Override
     public BookDto update(Long id, CreateBookRequestDto bookDto) {
         Book updatedBook = bookMapper.toModel(bookDto);
