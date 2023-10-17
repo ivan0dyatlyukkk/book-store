@@ -1,5 +1,8 @@
 package org.diatliuk.bookstore.service.impl;
 
+import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.diatliuk.bookstore.dto.cart.ShoppingCartDto;
 import org.diatliuk.bookstore.dto.cart.item.CartItemDto;
@@ -20,6 +23,7 @@ import org.diatliuk.bookstore.service.ShoppingCartService;
 import org.diatliuk.bookstore.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,28 +34,31 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final BookRepository bookRepository;
     private final ShoppingCartMapper cartMapper;
     private final CartItemMapper cartItemMapper;
-
     @Lazy
     @Autowired
     private UserService userService;
 
     @Override
-    public ShoppingCartDto get() {
-        User authenticatedUser = userService.getAuthenticatedUser();
+    public ShoppingCartDto get(Authentication authentication) {
+        User authenticatedUser = userService.getAuthenticatedUser(authentication);
         ShoppingCart shoppingCart = shoppingCartRepository
                                     .getShoppingCartByUserId(authenticatedUser.getId());
+        List<CartItem> cartItems = cartItemRepository.findAllByShoppingCartId(shoppingCart.getId());
+        shoppingCart.setCartItems(Set.copyOf(cartItems));
         return cartMapper.toDto(shoppingCart);
     }
 
+    @Transactional
     @Override
-    public CartItemDto save(CreateCartItemRequestDto requestDto) {
+    public CartItemDto save(Authentication authentication, CreateCartItemRequestDto requestDto) {
         CartItem cartItem = new CartItem();
         Book book = bookRepository.findById(requestDto.getBookId())
                 .orElseThrow(() -> new EntityNotFoundException("Can't find a book by id + "
                         + requestDto.getBookId()));
         cartItem.setBook(book);
 
-        User authenticatedUser = userService.getAuthenticatedUser();
+        User authenticatedUser = userService.getAuthenticatedUser(authentication);
+      
         ShoppingCart shoppingCart = shoppingCartRepository
                 .getShoppingCartByUserId(authenticatedUser.getId());
 
@@ -72,17 +79,19 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return cartItemMapper.toDto(cartItemRepository.save(cartItem));
     }
 
+    @Transactional
     @Override
-    public CartItemDto update(Long cartItemId, UpdateCartItemDto updateDto) {
-        User authenticatedUser = userService.getAuthenticatedUser();
+    public CartItemDto update(Authentication authentication,
+                              Long cartItemId,
+                              UpdateCartItemDto updateDto) {
+        User authenticatedUser = userService.getAuthenticatedUser(authentication);
         ShoppingCart shoppingCart = shoppingCartRepository
                 .getShoppingCartByUserId(authenticatedUser.getId());
-
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new EntityNotFoundException("Can't find a cart item by id: "
                                                                 + cartItemId));
 
-        if (!isUserAbleToModifyItem(shoppingCart, cartItemId)) {
+        if (!ifShoppingCartContainsCartItem(shoppingCart, cartItemId)) {
             throw new IllegalUserAccessException("The user can't modify this cart item!");
         }
 
@@ -91,12 +100,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public void deleteById(Long cartItemId) {
-        User authenticatedUser = userService.getAuthenticatedUser();
+    public void deleteById(Authentication authentication, Long cartItemId) {
+        User authenticatedUser = userService.getAuthenticatedUser(authentication);
         ShoppingCart shoppingCart = shoppingCartRepository
                 .getShoppingCartByUserId(authenticatedUser.getId());
 
-        if (!isUserAbleToModifyItem(shoppingCart, cartItemId)) {
+        if (!ifShoppingCartContainsCartItem(shoppingCart, cartItemId)) {
             throw new IllegalUserAccessException("The user can't modify this cart item!");
         }
         cartItemRepository.deleteById(cartItemId);
@@ -116,7 +125,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .anyMatch(cartItem -> cartItem.getBook().getId().equals(bookId));
     }
 
-    private boolean isUserAbleToModifyItem(ShoppingCart shoppingCart, Long cartItemId) {
+    private boolean ifShoppingCartContainsCartItem(ShoppingCart shoppingCart, Long cartItemId) {
         return shoppingCart.getCartItems()
                 .stream()
                 .anyMatch(cartItem -> cartItem.getId().equals(cartItemId));

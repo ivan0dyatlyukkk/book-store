@@ -4,17 +4,13 @@ import java.util.List;
 import org.diatliuk.bookstore.dto.order.CreateOrderRequestDto;
 import org.diatliuk.bookstore.dto.order.OrderDto;
 import org.diatliuk.bookstore.dto.order.UpdateOrderStatusRequestDto;
-import org.diatliuk.bookstore.dto.order.item.OrderItemDto;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 
 public interface OrderService {
-    OrderDto save(CreateOrderRequestDto requestDto);
+    OrderDto save(Authentication authentication, CreateOrderRequestDto requestDto);
 
     List<OrderDto> getAll(Pageable pageable);
 
     OrderDto update(Long id, UpdateOrderStatusRequestDto requestDto);
-
-    List<OrderItemDto> getItemsByOrderId(Long id);
-
-    OrderItemDto getItemInOrderById(Long orderId, Long id);
 }
