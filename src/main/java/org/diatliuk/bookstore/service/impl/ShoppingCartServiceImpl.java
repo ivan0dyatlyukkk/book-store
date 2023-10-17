@@ -58,6 +58,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cartItem.setBook(book);
 
         User authenticatedUser = userService.getAuthenticatedUser(authentication);
+      
         ShoppingCart shoppingCart = shoppingCartRepository
                 .getShoppingCartByUserId(authenticatedUser.getId());
 
@@ -86,7 +87,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         User authenticatedUser = userService.getAuthenticatedUser(authentication);
         ShoppingCart shoppingCart = shoppingCartRepository
                 .getShoppingCartByUserId(authenticatedUser.getId());
-
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new EntityNotFoundException("Can't find a cart item by id: "
                                                                 + cartItemId));
