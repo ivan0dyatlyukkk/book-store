@@ -1,8 +1,16 @@
 package org.diatliuk.bookstore.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import org.diatliuk.bookstore.dto.book.BookDto;
 import org.diatliuk.bookstore.dto.book.CreateBookRequestDto;
 import org.diatliuk.bookstore.exception.EntityNotFoundException;
@@ -20,10 +28,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceTest {
@@ -77,9 +81,7 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("""
-        Verify save() method by saving a book with correct data
-    """)
+    @DisplayName("Verify save() method by saving a book with correct data")
     void save_withValidData_returnsValidBook() {
         when(bookMapper.toModel(CREATE_BOOK_REQUEST_DTO)).thenReturn(TEST_BOOK);
         when(bookRepository.save(TEST_BOOK)).thenReturn(TEST_BOOK);
@@ -91,9 +93,7 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("""
-        Verify getAll() method with quantity restrictions
-    """)
+    @DisplayName("Verify getAll() method with quantity restrictions")
     void getAll_withPagination_returnsValidNumberOfBooks() {
         when(bookRepository.findAll(PAGEABLE)).thenReturn(new PageImpl<>(List.of(TEST_BOOK)));
         when(bookMapper.toDto(any())).thenReturn(RESPONSE_BOOK_DTO);
@@ -104,9 +104,7 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("""
-        Verify getById() method by using a valid id
-    """)
+    @DisplayName("Verify getById() method by using a valid id")
     void getById_withValidId_returnsBook() {
         when(bookRepository.findById(anyLong())).thenReturn(Optional.of(TEST_BOOK));
         when(bookMapper.toDto(TEST_BOOK)).thenReturn(RESPONSE_BOOK_DTO);
@@ -117,9 +115,7 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("""
-        Verify getById() method by using a valid id
-    """)
+    @DisplayName("Verify getById() method by using a valid id")
     void getById_withInvalidId_throwsException() {
         when(bookRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -127,9 +123,7 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("""
-        Verify update() method by using an existing book
-    """)
+    @DisplayName("Verify update() method by using an existing book")
     void update_withValidId_returnsUpdatedBook() {
         when(bookRepository.findById(anyLong())).thenReturn(Optional.of(TEST_BOOK));
         when(bookMapper.toModel(any())).thenReturn(TEST_BOOK);
@@ -141,9 +135,7 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("""
-        Verify update() method by using not existing book
-    """)
+    @DisplayName("Verify update() method by using not existing book")
     void update_withValidId_throwsException() {
         when(bookRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -152,9 +144,7 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("""
-        Verify delete() method by using an existing id
-    """)
+    @DisplayName("Verify delete() method by using an existing id")
     void deleteById_withValidId_void() {
         when(bookRepository.findById(anyLong())).thenReturn(Optional.of(TEST_BOOK));
 
@@ -162,9 +152,7 @@ class BookServiceTest {
     }
 
     @Test
-    @DisplayName("""
-        Verify delete() method by using not existing id
-    """)
+    @DisplayName("Verify delete() method by using not existing id")
     void deleteById_withValidId_throwsException() {
         when(bookRepository.findById(anyLong())).thenReturn(Optional.empty());
 

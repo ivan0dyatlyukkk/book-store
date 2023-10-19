@@ -1,8 +1,16 @@
 package org.diatliuk.bookstore.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import org.diatliuk.bookstore.dto.book.BookDtoWithoutCategoryIds;
 import org.diatliuk.bookstore.dto.category.CategoryDto;
 import org.diatliuk.bookstore.dto.category.CategoryResponseDto;
@@ -23,10 +31,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceTest {
@@ -83,9 +87,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("""
-        Verify the save() method by using valid data
-    """)
+    @DisplayName("Verify the save() method by using valid data")
     void save_withValidData_returnCategory() {
         when(categoryMapper.toModel(CATEGORY_DTO)).thenReturn(TEST_CATEGORY);
         when(categoryRepository.save(TEST_CATEGORY)).thenReturn(TEST_CATEGORY);
@@ -97,11 +99,10 @@ class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("""
-        Verify the getAll() method
-    """)
+    @DisplayName("Verify the getAll() method")
     void getAll_withPagination_returnCategory() {
-        when(categoryRepository.findAll(PAGEABLE)).thenReturn(new PageImpl<>(List.of(TEST_CATEGORY)));
+        when(categoryRepository.findAll(PAGEABLE))
+                                .thenReturn(new PageImpl<>(List.of(TEST_CATEGORY)));
         when(categoryMapper.toResponseDto(any())).thenReturn(RESPONSE_CATEGORY_DTO);
 
         List<CategoryResponseDto> actualAllCategories = categoryService.getAll(PAGEABLE);
@@ -110,9 +111,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("""
-        Verify the getById() method by using an existing id
-    """)
+    @DisplayName("Verify the getById() method by using an existing id")
     void getById_withValidId_returnsCategory() {
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(TEST_CATEGORY));
         when(categoryMapper.toDto(any())).thenReturn(CATEGORY_DTO);
@@ -123,21 +122,17 @@ class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("""
-        Verify the getById() method by using an existing id
-    """)
+    @DisplayName("Verify the getById() method by using an existing id")
     void getById_withInvalidId_throws() {
         when(categoryRepository.findById(INVALID_CATEGORY_ID)).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class,
-                                            () -> categoryService.getById(INVALID_CATEGORY_ID)
+                () -> categoryService.getById(INVALID_CATEGORY_ID)
         );
     }
 
     @Test
-    @DisplayName("""
-        Verify the update() method by using an existing id
-    """)
+    @DisplayName("Verify the update() method by using an existing id")
     void update_withValidId_returnsCategory() {
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(TEST_CATEGORY));
         when(categoryMapper.toModel(CATEGORY_DTO)).thenReturn(TEST_CATEGORY);
@@ -150,9 +145,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("""
-        Verify the update() method by using not existing id
-    """)
+    @DisplayName("Verify the update() method by using not existing id")
     void update_withInvalidId_returnsCategory() {
         when(categoryRepository.findById(INVALID_CATEGORY_ID)).thenReturn(Optional.empty());
 
@@ -162,9 +155,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("""
-        Verify the deleteById() method by using an existing id
-    """)
+    @DisplayName("Verify the deleteById() method by using an existing id")
     void deleteById_withValidId_void() {
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(TEST_CATEGORY));
 
@@ -172,9 +163,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("""
-        Verify the deleteById() method by using not existing id
-    """)
+    @DisplayName("Verify the deleteById() method by using not existing id")
     void deleteById_withInvalidId_void() {
         when(categoryRepository.findById(INVALID_CATEGORY_ID)).thenReturn(Optional.empty());
 
@@ -184,9 +173,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("""
-        Verify the getBooksByCategoryId() using a category id
-    """)
+    @DisplayName("Verify the getBooksByCategoryId() using a category id")
     void getBooksByCategoryId() {
         when(bookRepository.findAllByCategoriesId(TEST_CATEGORY.getId()))
                                             .thenReturn(List.of(TEST_BOOK));

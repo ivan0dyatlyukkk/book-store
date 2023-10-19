@@ -19,16 +19,13 @@ class BookRepositoryTest {
     @Autowired
     private BookRepository bookRepository;
 
-
     @BeforeAll
     static void beforeAll() {
 
     }
 
     @Test
-    @DisplayName("""
-        Find a book by id
-    """)
+    @DisplayName("Verify the findById() method by using an existing id")
     @Sql(
             scripts = BEFORE_TEST_METHOD_QUERIES,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
@@ -41,9 +38,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName("""
-        Find a book by not existing book id
-    """)
+    @DisplayName("Verify the findById() method by using not existing book id")
     @Sql(
             scripts = BEFORE_TEST_METHOD_QUERIES,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
@@ -57,9 +52,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    @DisplayName("""
-        Find all books
-    """)
+    @DisplayName("Verify the findAll() method")
     @Sql(
             scripts = BEFORE_TEST_METHOD_QUERIES,
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
