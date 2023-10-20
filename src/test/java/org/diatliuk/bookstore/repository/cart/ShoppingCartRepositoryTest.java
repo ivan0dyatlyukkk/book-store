@@ -35,7 +35,7 @@ class ShoppingCartRepositoryTest {
             scripts = DELETE_DEFAULT_USERS_AND_CARTS,
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
-    void getShoppingCartByUserId_withValidUserId() {
+    void getShoppingCartByUserId_withValidUserId_returnsCart() {
         ShoppingCart actualCart = cartRepository.getShoppingCartByUserId(TEST_VALID_USER_ID);
 
         assertNotNull(actualCart.getUser());

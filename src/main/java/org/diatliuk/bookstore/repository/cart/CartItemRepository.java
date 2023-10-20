@@ -14,6 +14,4 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     @Query("FROM CartItem ci LEFT JOIN FETCH ci.book "
             + "LEFT JOIN FETCH ci.shoppingCart WHERE ci.shoppingCart.id = :id")
     List<CartItem> findAllByShoppingCartId(Long id);
-
-    boolean existsByIdAndShoppingCartId(Long id, Long shoppingCartId);
 }
