@@ -1,1 +1,1 @@
-DELETE FROM categories WHERE categories.name = 'Test category'
+DELETE FROM categories WHERE categories.name = 'Test category';

@@ -37,6 +37,8 @@ class BookServiceTest {
     private static final Category TEST_CATEGORY = new Category();
     private static final Long INVALID_BOOK_ID = -1L;
     private static final Pageable PAGEABLE = Pageable.ofSize(10);
+    private static final String FIRST_PART_OF_ERROR_MESSAGE = "Can't find ";
+    private static final String SECOND_PART_OF_ERROR_MESSAGE = "by id: ";
 
     @Mock
     private BookRepository bookRepository;
@@ -117,9 +119,14 @@ class BookServiceTest {
     @Test
     @DisplayName("Verify getById() method by using a valid id")
     void getById_withInvalidId_throwsException() {
+        String expectedErrorMessage = generateDefaultEntityNotFoundErrorMessage(INVALID_BOOK_ID);
         when(bookRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> bookService.getById(INVALID_BOOK_ID));
+        Exception exception = assertThrows(EntityNotFoundException.class,
+                () -> bookService.getById(INVALID_BOOK_ID)
+        );
+
+        assertEquals(expectedErrorMessage, exception.getMessage());
     }
 
     @Test
@@ -137,10 +144,14 @@ class BookServiceTest {
     @Test
     @DisplayName("Verify update() method by using not existing book")
     void update_withValidId_throwsException() {
+        String expectedErrorMessage = generateDefaultEntityNotFoundErrorMessage(INVALID_BOOK_ID);
         when(bookRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> bookService.update(INVALID_BOOK_ID,
-                                                                        CREATE_BOOK_REQUEST_DTO));
+        Exception exception = assertThrows(EntityNotFoundException.class,
+                () -> bookService.update(INVALID_BOOK_ID, CREATE_BOOK_REQUEST_DTO)
+        );
+
+        assertEquals(expectedErrorMessage, exception.getMessage());
     }
 
     @Test
@@ -153,9 +164,23 @@ class BookServiceTest {
 
     @Test
     @DisplayName("Verify delete() method by using not existing id")
-    void deleteById_withValidId_throwsException() {
+    void deleteById_withInvalidId_throwsException() {
+        String expectedErrorMessage = generateDefaultEntityNotFoundErrorMessage(INVALID_BOOK_ID);
         when(bookRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> bookService.deleteById(INVALID_BOOK_ID));
+        Exception exception = assertThrows(EntityNotFoundException.class,
+                () -> bookService.deleteById(INVALID_BOOK_ID)
+        );
+
+        assertEquals(expectedErrorMessage, exception.getMessage());
+    }
+
+    private String generateDefaultEntityNotFoundErrorMessage(Long id) {
+        return new StringBuilder()
+                .append(FIRST_PART_OF_ERROR_MESSAGE)
+                .append("a book ")
+                .append(SECOND_PART_OF_ERROR_MESSAGE)
+                .append(id)
+                .toString();
     }
 }

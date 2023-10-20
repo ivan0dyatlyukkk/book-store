@@ -41,6 +41,8 @@ class CategoryServiceTest {
     private static final Book TEST_BOOK = new Book();
     private static final Long INVALID_CATEGORY_ID = -1L;
     private static final Pageable PAGEABLE = Pageable.ofSize(10);
+    private static final String FIRST_PART_OF_ERROR_MESSAGE = "Can't find ";
+    private static final String SECOND_PART_OF_ERROR_MESSAGE = "by id: ";
 
     @Mock
     private BookRepository bookRepository;
@@ -123,12 +125,15 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("Verify the getById() method by using an existing id")
-    void getById_withInvalidId_throws() {
+    void getById_withInvalidId_throwsException() {
+        String expectedErrMessage = generateDefaultEntityNotFoundErrorMessage(INVALID_CATEGORY_ID);
         when(categoryRepository.findById(INVALID_CATEGORY_ID)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class,
+        Exception exception = assertThrows(EntityNotFoundException.class,
                 () -> categoryService.getById(INVALID_CATEGORY_ID)
         );
+
+        assertEquals(expectedErrMessage, exception.getMessage());
     }
 
     @Test
@@ -164,17 +169,20 @@ class CategoryServiceTest {
 
     @Test
     @DisplayName("Verify the deleteById() method by using not existing id")
-    void deleteById_withInvalidId_void() {
+    void deleteById_withInvalidId_throwsException() {
+        String expectedErrMessage = generateDefaultEntityNotFoundErrorMessage(INVALID_CATEGORY_ID);
         when(categoryRepository.findById(INVALID_CATEGORY_ID)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class,
+        Exception exception = assertThrows(EntityNotFoundException.class,
                 () -> categoryService.deleteById(INVALID_CATEGORY_ID)
         );
+
+        assertEquals(expectedErrMessage, exception.getMessage());
     }
 
     @Test
     @DisplayName("Verify the getBooksByCategoryId() using a category id")
-    void getBooksByCategoryId() {
+    void getBooksByCategoryId_withValidId_returnsBooks() {
         when(bookRepository.findAllByCategoriesId(TEST_CATEGORY.getId()))
                                             .thenReturn(List.of(TEST_BOOK));
         when(bookMapper.toBookDtoWithoutCategoryIds(TEST_BOOK)).thenReturn(RESPONSE_BOOK);
@@ -183,5 +191,14 @@ class CategoryServiceTest {
                                                     .getBooksByCategoryId(TEST_CATEGORY.getId());
 
         assertEquals(List.of(RESPONSE_BOOK), actualBooks);
+    }
+
+    private String generateDefaultEntityNotFoundErrorMessage(Long id) {
+        return new StringBuilder()
+                .append(FIRST_PART_OF_ERROR_MESSAGE)
+                .append("a category ")
+                .append(SECOND_PART_OF_ERROR_MESSAGE)
+                .append(id)
+                .toString();
     }
 }
