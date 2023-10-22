@@ -50,7 +50,8 @@ class CartItemRepositoryTest {
             executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD
     )
     void findAllByShoppingCardId_withValidId_returnsCartItems() {
-        CartItem actualCartItem = cartItemRepository.findAllByShoppingCartId(TEST_VALID_CART_ITEM_ID).get(0);
+        CartItem actualCartItem = cartItemRepository
+                                .findAllByShoppingCartId(TEST_VALID_CART_ITEM_ID).get(0);
 
         assertNotNull(actualCartItem);
         assertNotNull(actualCartItem.getShoppingCart());

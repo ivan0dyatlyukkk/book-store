@@ -1,17 +1,14 @@
 package org.diatliuk.bookstore.repository.cart;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.diatliuk.bookstore.model.ShoppingCart;
-import org.diatliuk.bookstore.model.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
-
-import java.util.Locale;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
