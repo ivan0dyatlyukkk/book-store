@@ -84,7 +84,7 @@ class CategoryControllerTest {
         CATEGORY_UPDATE_DTO.setDescription("This is an updated description");
     }
 
-    @WithMockUser(username = "user", roles = {"ADMIN"})
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
     @DisplayName("Verify the create() method by using valid data")
     @Sql(
