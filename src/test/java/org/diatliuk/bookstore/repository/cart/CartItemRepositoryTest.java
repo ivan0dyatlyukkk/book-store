@@ -57,6 +57,9 @@ class CartItemRepositoryTest {
         CartItem actualCartItem = cartItemRepository.findById(TEST_VALID_CART_ITEM_ID).get();
 
         assertNotNull(actualCartItem.getShoppingCart());
+        assertEquals(TEST_VALID_CART_ID, actualCartItem.getShoppingCart().getId());
+        assertTrue(EqualsBuilder.reflectionEquals(DEFAULT_BOOK_OF_CART_ITEM,
+                                                  actualCartItem.getBook()));
     }
 
     @Test
