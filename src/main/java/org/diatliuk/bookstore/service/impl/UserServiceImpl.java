@@ -14,6 +14,8 @@ import org.diatliuk.bookstore.repository.role.RoleRepository;
 import org.diatliuk.bookstore.repository.user.UserRepository;
 import org.diatliuk.bookstore.service.ShoppingCartService;
 import org.diatliuk.bookstore.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,9 +26,11 @@ public class UserServiceImpl implements UserService {
     private static final RoleName DEFAULT_ROLE = RoleName.ROLE_USER;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final ShoppingCartService shoppingCartService;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    @Lazy
+    @Autowired
+    private ShoppingCartService shoppingCartService;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto requestDto)

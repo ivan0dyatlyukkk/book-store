@@ -21,8 +21,6 @@ import org.diatliuk.bookstore.repository.cart.CartItemRepository;
 import org.diatliuk.bookstore.repository.cart.ShoppingCartRepository;
 import org.diatliuk.bookstore.service.ShoppingCartService;
 import org.diatliuk.bookstore.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -34,9 +32,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final BookRepository bookRepository;
     private final ShoppingCartMapper cartMapper;
     private final CartItemMapper cartItemMapper;
-    @Lazy
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @Override
     public ShoppingCartDto get(Authentication authentication) {
