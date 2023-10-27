@@ -46,6 +46,7 @@ class CartControllerTest {
     private static final Book TEST_BOOK = new Book();
     private static final int TEST_BOOK_QUANTITY = 5;
     private static final CartItemDto TEST_CART_ITEM_DTO = new CartItemDto();
+    private static final CartItemDto DEFAULT_CART_ITEM_DTO = new CartItemDto();
     private static final int UPDATED_CART_ITEM_QUANTITY = 10;
     private static final Long DEFAULT_CART_ITEM_ID = 1L;
     private static final String DEFAULT_BOOK_TITLE = "Test";
@@ -78,9 +79,15 @@ class CartControllerTest {
         TEST_BOOK.setTitle("The book 5");
         TEST_BOOK.setAuthor("ADMIN ADMIN");
 
+        TEST_CART_ITEM_DTO.setId(1L);
         TEST_CART_ITEM_DTO.setBookId(TEST_BOOK.getId());
         TEST_CART_ITEM_DTO.setBookTitle(TEST_BOOK.getTitle());
         TEST_CART_ITEM_DTO.setQuantity(TEST_BOOK_QUANTITY);
+
+        DEFAULT_CART_ITEM_DTO.setId(1L);
+        DEFAULT_CART_ITEM_DTO.setBookId(4L);
+        DEFAULT_CART_ITEM_DTO.setBookTitle("Test");
+        DEFAULT_CART_ITEM_DTO.setQuantity(1);
     }
 
     @BeforeEach
@@ -141,6 +148,7 @@ class CartControllerTest {
 
         assertNotNull(shoppingCartDto);
         assertEquals(TEST_USER.getId(), shoppingCartDto.getUserId());
+        assertTrue(shoppingCartDto.getCartItems().contains(DEFAULT_CART_ITEM_DTO));
     }
 
     @WithMockUser(username = TEST_USER_NAME)
