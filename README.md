@@ -1,9 +1,9 @@
 <h1 align="center">
-    The Online Bookstore API
+    The BookWorm API
 </h1>
 
 ## Overview
-The Online Bookstore API 📚 provides simple APIs for managing an online bookstore. 
+The BookWorm API 📚 provides simple APIs for managing an online bookstore. 
 
 
 ## Table of contents
@@ -115,10 +115,12 @@ My email: `studdyatlyuk21@gmail.com`
 
 
 ## 🎯Summary
-<strong><i>The Online Bookstore API</i></strong> is a powerful tool designed to create a seamless and user-friendly experience for book enthusiasts and administrators alike. It serves as the backbone for managing a virtual library of literary treasures and facilitates the process of discovering, purchasing, and managing books. 
+<strong><i>The BookWorm API</i></strong> is a powerful tool designed to create a seamless and user-friendly experience for book enthusiasts and administrators alike. It serves as the backbone for managing a virtual library of literary treasures and facilitates the process of discovering, purchasing, and managing books. 
 
 The video instructions for usage you can watch here:
 [loom-video](https://www.loom.com/share/aa48bd7d22ee43bdb4acd0356d3a19d1?sid=4cb89221-9b2b-4eb3-a4d7-530a01d9edfb)
 
-[postman-collection]:i-will-add-it-after-merging
-[postman-environment]:i-will-add-it-after-merging
+Let's try! Just use the link: [book-worm-api](http://ec2-107-23-190-56.compute-1.amazonaws.com/api/swagger-ui/index.html#/)
+
+[postman-collection]:Book-store.postman_collection.json
+[postman-environment]:Book-store.postman_environment.json
