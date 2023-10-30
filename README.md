@@ -1,5 +1,5 @@
 <h1 align="center">
-    The Online Bookstore API
+    The BookWorm API
 </h1>
 
 ## Overview
